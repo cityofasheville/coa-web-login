@@ -32,7 +32,7 @@ function coaWebLogin(pool, logger, req) {
   }
   logger.info('New client connection');
   if (!req.headers.authorization || req.headers.authorization === 'null') {
-    return userInfo;
+    return Promise.resolve(userInfo);
   }
   logger.info('Attempt login verification');
   return firebase.auth().verifyIdToken(req.headers.authorization)
