@@ -1,6 +1,6 @@
 {
   "name": "coa-web-login",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "City of Asheville web application log-in library",
   "main": "index.js",
   "scripts": {
