@@ -1,6 +1,6 @@
 {
   "name": "coa-web-login",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "City of Asheville web application log-in library",
   "main": "index.js",
   "scripts": {
@@ -22,7 +22,7 @@
     "axios": "^0.18.0"
   },
   "peerDependencies": {
-    "pg": "6.1.0",
+    "pg": "^7.4.3",
     "coa-node-logging": "^2.0.3"
   },
   "devDependencies": {
