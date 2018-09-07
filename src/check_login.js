@@ -13,6 +13,7 @@ const checkLogin = function (req, cacheData = null, cache) {
 
     return decodeToken(kid, process.env.appClientId, cacheData.id_token, 'test', cache)
     .then(result => {
+      console.log(JSON.stringify(result));
       if (result.status == 'expired') {
         // for refresh see https://docs.aws.amazon.com/cognito/latest/developerguide/token-endpoint.html
         const refreshData = {
