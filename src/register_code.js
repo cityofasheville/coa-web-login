@@ -18,7 +18,7 @@ const registerCode = function (parent, args, context) {
     scope: 'email openid profile',
     client_id: process.env.appClientId,
     code: args.code,
-    redirect_uri: 'http://localhost:3000/xyz',
+    redirect_uri: 'http://localhost:3000/login',
   };
 
   let sections = null;
