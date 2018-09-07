@@ -11,7 +11,7 @@ const checkLogin = function (req, cacheData = null, cache) {
     let header = JSON.parse(jose.util.base64url.decode(cacheData.id_token.split('.')[0]));
     kid = header.kid;
 
-    decodeToken(kid, process.env.appClientId, cacheData.id_token, 'test', cache)
+    return decodeToken(kid, process.env.appClientId, cacheData.id_token, 'test', cache)
     .then(result => {
       if (result.status == 'expired') {
         // for refresh see https://docs.aws.amazon.com/cognito/latest/developerguide/token-endpoint.html
@@ -56,10 +56,12 @@ const checkLogin = function (req, cacheData = null, cache) {
       } else {
         throw new Error(`Login expired - you will need to log in again (Status: ${result.status})`);
       }
+      return Promise.resolve(req.session.loggedIn);
     })
     .catch(err => {
       if (err) console.log(`Error checking login: ${err}`);
     });
   }
+  return Promise.resolve(false);
 };
 module.exports = checkLogin;
