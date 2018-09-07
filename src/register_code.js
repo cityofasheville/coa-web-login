@@ -12,13 +12,14 @@ const registerCode = function (parent, args, context) {
   // const region = 'us-east-1';
   // const userpoolId = 'us-east-1_hBNUnqaVB';
   // const appClientId = '2uu574tlad2ajk5hmj94fnjeva';
-
+  console.log(`The redirect URI is ${args.redirect_uri}`);
   const data = {
     grant_type: 'authorization_code',
     scope: 'email openid profile',
     client_id: process.env.appClientId,
     code: args.code,
-    redirect_uri: 'http://localhost:3000/login',
+    redirect_uri: args.redirect_uri,
+//     redirect_uri: 'http://localhost:3000/login',
   };
 
   let sections = null;
