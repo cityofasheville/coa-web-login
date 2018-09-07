@@ -13,7 +13,6 @@ const checkLogin = function (req, cacheData = null, cache) {
 
     return decodeToken(kid, process.env.appClientId, cacheData.id_token, 'test', cache)
     .then(result => {
-      console.log(JSON.stringify(result));
       if (result.status == 'expired') {
         // for refresh see https://docs.aws.amazon.com/cognito/latest/developerguide/token-endpoint.html
         const refreshData = {
@@ -43,7 +42,7 @@ const checkLogin = function (req, cacheData = null, cache) {
               if (result.status !== 'ok') throw new Error(`Error decoding token: ${result.status}`);
               const claims = result.claims;
               req.session.loggedIn =true;
-
+              req.session.loginProvider = response.data.identities[0].providerType;
               if (cache) cache.store(req.session.id,
                 Object.assign(cacheData, {
                   id_token: response.data.id_token,

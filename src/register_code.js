@@ -35,7 +35,6 @@ const registerCode = function (parent, args, context) {
     headers,
   })
   .then((response) => {
-    console.log(JSON.stringify(response.data));
     token = response.data.id_token;
     context.cache.store(context.req.session.id, {
       id_token: token,
