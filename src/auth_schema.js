@@ -6,7 +6,7 @@ const schema = `
   }
 
   extend type Mutation {
-    registerCode (code: String!, redirectUri: String!): LoginResult
+    registerCode (code: String!, redirect_uri: String!): LoginResult
     logout: LoginResult
   }
 `;
