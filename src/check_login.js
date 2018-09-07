@@ -4,14 +4,14 @@ const jose = require('node-jose');
 const axios = require('axios');
 const qs = require('qs');
 
-const checkLogin = function (req, current_id = null, cache) {
+const checkLogin = function (req, cacheData = null, cache) {
   if (req.session) req.session.loggedIn =false;
-  if (current_id) {
+  if (cacheData) {
     // get the kid from the headers prior to verification
-    let header = JSON.parse(jose.util.base64url.decode(current_id.id_token.split('.')[0]));
+    let header = JSON.parse(jose.util.base64url.decode(cacheData.id_token.split('.')[0]));
     kid = header.kid;
 
-    decodeToken(kid, process.env.appClientId, current_id.id_token, 'test', cache)
+    decodeToken(kid, process.env.appClientId, cacheData.id_token, 'test', cache)
     .then(result => {
       if (result.status == 'expired') {
         // for refresh see https://docs.aws.amazon.com/cognito/latest/developerguide/token-endpoint.html
@@ -19,7 +19,7 @@ const checkLogin = function (req, current_id = null, cache) {
           grant_type: 'refresh_token',
           scope: 'email openid profile',
           client_id: process.env.appClientId,
-          refresh_token: current_id.refresh_token,
+          refresh_token: cacheData.refresh_token,
           redirect_uri: '',
         };
         const headers = {
@@ -44,7 +44,7 @@ const checkLogin = function (req, current_id = null, cache) {
               req.session.loggedIn =true;
 
               if (cache) cache.store(req.session.id,
-                Object.assign(c, {
+                Object.assign(cacheData, {
                   id_token: response.data.id_token,
                   access_token: response.data.access_token,
                 }));
