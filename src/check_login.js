@@ -53,6 +53,7 @@ const checkLogin = function (req, cacheData = null, cache) {
         });
       } else if (result.status == 'ok') {
         req.session.loggedIn =true;
+        req.session.loginProvider = response.data.identities[0].providerType;
       } else {
         throw new Error(`Login expired - you will need to log in again (Status: ${result.status})`);
       }
