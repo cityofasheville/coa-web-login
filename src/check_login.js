@@ -42,8 +42,10 @@ const checkLogin = function (req, cacheData = null, cache) {
               if (result.status !== 'ok') throw new Error(`Error decoding token: ${result.status}`);
               const claims = result.claims;
               req.session.loggedIn =true;
-              console.log(result.claims);
-              req.session.loginProvider = result.claims.identities[0].providerName;
+              req.session.loginProvider = 'Unknown';
+              if (result.claims.identities && result.claims.identities.length > 0) {
+                req.session.loginProvider = result.claims.identities[0].providerName;
+              }
               if (cache) cache.store(req.session.id,
                 Object.assign(cacheData, {
                   id_token: response.data.id_token,
@@ -55,8 +57,10 @@ const checkLogin = function (req, cacheData = null, cache) {
         });
       } else if (result.status == 'ok') {
         req.session.loggedIn =true;
-        console.log(result.claims);
-        req.session.loginProvider = result.claims.identities[0].providerName;
+        req.session.loginProvider = 'Unknown';
+        if (result.claims.identities && result.claims.identities.length > 0) {
+          req.session.loginProvider = result.claims.identities[0].providerName;
+        }
       } else {
         throw new Error(`Login expired - you will need to log in again (Status: ${result.status})`);
       }
