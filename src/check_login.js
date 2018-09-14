@@ -37,22 +37,25 @@ const checkLogin = function (req, cacheData = null, cache) {
             const sections = response.data.id_token.split('.');
             header = JSON.parse(jose.util.base64url.decode(sections[0]));
             kid = header.kid;
-            decodeToken(kid, process.env.appClientId, response.data.id_token, 'refresh_token', cache)
+            return decodeToken(kid, process.env.appClientId, response.data.id_token, 'refresh_token', cache)
             .then(result => {
               if (result.status !== 'ok') throw new Error(`Error decoding token: ${result.status}`);
               const claims = result.claims;
               req.session.loggedIn =true;
+              console.log(result.claims);
               req.session.loginProvider = result.claims.identities[0].providerName;
               if (cache) cache.store(req.session.id,
                 Object.assign(cacheData, {
                   id_token: response.data.id_token,
                   access_token: response.data.access_token,
                 }));
+              return Promise.resolve(true);
             });
           }      
         });
       } else if (result.status == 'ok') {
         req.session.loggedIn =true;
+        console.log(result.claims);
         req.session.loginProvider = result.claims.identities[0].providerName;
       } else {
         throw new Error(`Login expired - you will need to log in again (Status: ${result.status})`);
