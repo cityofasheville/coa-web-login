@@ -6,7 +6,7 @@ const qs = require('qs');
 
 const checkLogin = function (req, cacheData = null, cache) {
   if (req.session) req.session.loggedIn =false;
-  if (cacheData) {
+  if (cacheData && cacheData.id_token) {
     // get the kid from the headers prior to verification
     let header = JSON.parse(jose.util.base64url.decode(cacheData.id_token.split('.')[0]));
     kid = header.kid;
