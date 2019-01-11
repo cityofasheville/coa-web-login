@@ -5,8 +5,6 @@ const getNonCityUser = (sessionId, cachedContext, cache) => {
   let user = baseUser;
   if (cachedContext.sessionState.loggedIn) {
     user = Object.assign({}, baseUser, { email: cachedContext.email });
-    console.log('Storing from getNonCityUser');
-
     return cache.store(sessionId, Object.assign({}, cachedContext, { user }))
       .then((status) => {
         if (status !== 'OK') console.log('Error storing non-City user to cache');
@@ -36,7 +34,6 @@ const getUserInfo = (sessionId, cachedContext, config, cache, dbConn) => {
           if (res.rows.length === 0) return getNonCityUser(sessionId, cachedContext, cache);
           return getEmployeeInfo([res.rows[0].emp_id], cache, null, dbConn)
             .then((u) => {
-              console.log('Storing from CityUser');
               cache.store(sessionId, Object.assign({},
                 cachedContext, { user: u[0] })); // Should verify success, but skip for now.
               return Promise.resolve(u[0]);

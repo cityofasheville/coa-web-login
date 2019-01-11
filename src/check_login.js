@@ -1,12 +1,10 @@
 // const cache = require('../cache/cache');
-/* eslint-disable */
 const decodeToken = require('./decode_token');
 const jose = require('node-jose');
 const axios = require('axios');
 const qs = require('qs');
 
 const checkLogin = function (sessionId, cacheData = null, cache) {
-  console.log('In checkLogin');
   if (cacheData) cacheData.sessionState.loggedIn = false;
   if (cacheData && cacheData.id_token) {
     if (!cacheData.sessionState) cacheData.sessionState = {};
@@ -50,7 +48,6 @@ const checkLogin = function (sessionId, cacheData = null, cache) {
                 cacheData.sessionState.loginProvider = result.claims.identities[0].providerName;
               }
               if (cache) {
-                console.log('Cache store from checkLogin refresh');
                 cache.store(sessionId,
                   Object.assign(cacheData, {
                     id_token: response.data.id_token,
@@ -68,7 +65,6 @@ const checkLogin = function (sessionId, cacheData = null, cache) {
           cacheData.sessionState.loginProvider = result.claims.identities[0].providerName;
         }
         if (cache) {
-          console.log('Cache store from checkLogin regular');
           cache.store(sessionId, cacheData);
         }
       } else {

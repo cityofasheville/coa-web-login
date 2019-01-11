@@ -52,7 +52,6 @@ const getEmployeeInfo = (employeeIds, cache, email, dbConn) => {
                     supervisor_email: e.sup_email,
                     hire_date: e.hire_date,
                   });
-                  console.log('Cache store from employee_info (different key)');
                   cache.store(`employee-${user.id}`, user); // Should wait to verify, but skip for now.
                   userMap[user.id] = user;
                 });

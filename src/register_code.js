@@ -11,7 +11,6 @@ const registerCode = function (parent, args, context) {
     'Content-Type': 'application/x-www-form-urlencoded',
   };
   let cacheData = initializeContext();
-  console.log(`I am in registerCode`);
 
   const data = {
     grant_type: 'authorization_code',
@@ -30,7 +29,6 @@ const registerCode = function (parent, args, context) {
   // Code adapted from https://github.com/awslabs/aws-support-tools/blob/master/Cognito/decode-verify-jwt/decode-verify-jwt.js
   return context.cache.get(context.sessionId)
   .then (cdata => {
-    console.log(`In register code: ${JSON.stringify(cdata)}`);
     if (cdata) cacheData = cdata;
     return axios({
       method: 'post',
@@ -55,7 +53,6 @@ const registerCode = function (parent, args, context) {
       if (claims.identities && claims.identities.length > 0) {
         loginProvider = claims.identities[0].providerName;
       }
-      console.log('Cache store from register_code');
       context.cache.store(context.sessionId, Object.assign(cacheData, {
           email: claims.email,
           loginProvider,
