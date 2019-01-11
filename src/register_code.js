@@ -1,18 +1,18 @@
+/* eslint-disable */
 const axios = require('axios');
 const jose = require('node-jose');
 const decodeToken = require('./decode_token');
 const getPublicKeys = require('./get_public_keys');
 const qs = require('qs');
+const initializeContext = require('./context');
 
 const registerCode = function (parent, args, context) {
   const headers = {
     'Content-Type': 'application/x-www-form-urlencoded',
   };
+  let cacheData = initializeContext();
+  console.log(`I am in registerCode`);
 
-  // const region = 'us-east-1';
-  // const userpoolId = 'us-east-1_hBNUnqaVB';
-  // const appClientId = '2uu574tlad2ajk5hmj94fnjeva';
-  console.log(`The redirect URI is ${args.redirect_uri}`);
   const data = {
     grant_type: 'authorization_code',
     scope: 'email openid profile',
@@ -28,20 +28,20 @@ const registerCode = function (parent, args, context) {
   let token = null;
 
   // Code adapted from https://github.com/awslabs/aws-support-tools/blob/master/Cognito/decode-verify-jwt/decode-verify-jwt.js
-
-  return axios({
-    method: 'post',
-    url: process.env.cognitoOauthUrl,
-    data: qs.stringify(data),
-    headers,
+  return context.cache.get(context.sessionId)
+  .then (cdata => {
+    console.log(`In register code: ${JSON.stringify(cdata)}`);
+    if (cdata) cacheData = cdata;
+    return axios({
+      method: 'post',
+      url: process.env.cognitoOauthUrl,
+      data: qs.stringify(data),
+      headers,
+    });
   })
   .then((response) => {
     token = response.data.id_token;
-    context.cache.store(context.req.session.id, {
-      id_token: token,
-      access_token: response.data.access_token,
-      refresh_token: response.data.refresh_token,
-    });
+
     sections = token.split('.');
     // get the kid from the headers prior to verification
     header = JSON.parse(jose.util.base64url.decode(sections[0]));
@@ -50,9 +50,20 @@ const registerCode = function (parent, args, context) {
     .then(result => {
       if (result.status !== 'ok') throw new Error(`Error decoding token: ${result.status}`);
       const claims = result.claims;
-      if (context.session) {
-        context.session.email = claims.email;
+
+      let loginProvider = 'Unknown';
+      if (claims.identities && claims.identities.length > 0) {
+        loginProvider = claims.identities[0].providerName;
       }
+      console.log('Cache store from register_code');
+      context.cache.store(context.sessionId, Object.assign(cacheData, {
+          email: claims.email,
+          loginProvider,
+          sessionState: { loggedIn: true },
+          id_token: response.data.id_token,
+          access_token: response.data.access_token,
+          refresh_token: response.data.refresh_token,
+        }));
       return Promise.resolve({ loggedIn: true, message: 'Hi there', reason: 'No reason' });
     });
 
