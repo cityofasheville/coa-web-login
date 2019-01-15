@@ -8,7 +8,7 @@ const getNonCityUser = (sessionId, cachedContext, cache) => {
     return cache.store(sessionId, Object.assign({}, cachedContext, { user }))
       .then((status) => {
         if (status !== 'OK') console.log('Error storing non-City user to cache');
-        return Promise.resolve(user)
+        return Promise.resolve(user);
       });
   }
   return Promise.resolve(user);
@@ -40,6 +40,7 @@ const getUserInfo = (sessionId, cachedContext, config, cache, dbConn) => {
             });
         });
     }
+    return Promise.resolve(user);
   }
   return getNonCityUser(sessionId, cachedContext, cache);
 };
