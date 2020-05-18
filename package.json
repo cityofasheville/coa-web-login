@@ -1,11 +1,9 @@
 {
   "name": "coa-web-login",
-  "version": "2.2.2",
+  "version": "2.2.4",
   "description": "City of Asheville web application log-in library",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "scripts": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/cityofasheville/coa-web-login.git"
@@ -17,14 +15,13 @@
   },
   "homepage": "https://github.com/cityofasheville/coa-web-login#readme",
   "dependencies": {
-    "node-jose": "^1.0.0",
-    "qs": "^6.5.2",
+    "node-jose": "^1.1.4",
+    "qs": "^6.9.3",
     "axios": "^0.18.0"
   },
   "peerDependencies": {
     "pg": "^7.4.3",
-    "coa-node-logging": "^2.0.3"
+    "coa-node-logging": "^3.1.0"
   },
-  "devDependencies": {
-  }
+  "devDependencies": {}
 }
