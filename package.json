@@ -15,7 +15,7 @@
   },
   "homepage": "https://github.com/cityofasheville/coa-web-login#readme",
   "dependencies": {
-    "node-jose": "^1.1.4",
+    "node-jose": "^2.0.0",
     "qs": "^6.9.3",
     "axios": "^0.19.2"
   },
