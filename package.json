@@ -15,9 +15,19 @@
   },
   "homepage": "https://github.com/cityofasheville/coa-web-login#readme",
   "dependencies": {
+<<<<<<< HEAD
     "node-jose": "^1.1.4",
     "qs": "^6.9.3",
     "axios": "^0.19.2"
+||||||| merged common ancestors
+    "node-jose": "^1.1.4",
+    "qs": "^6.9.3",
+    "axios": "^0.18.0"
+=======
+    "axios": "^0.19.2",
+    "node-jose": "^2.0.0",
+    "qs": "^6.9.3"
+>>>>>>> development
   },
   "peerDependencies": {
     "pg": "^8.0.3",
